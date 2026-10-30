@@ -416,7 +416,7 @@
         <div class="form-grid">
           <label class="field"><span>Full name</span><input name="fullName" maxlength="60" value="${user.fullName}"><p class="field-error"></p></label>
           <label class="field"><span>Username (cannot be changed)</span><input value="${user.username}" disabled></label>
-          <label class="field"><span>Email</span><input name="email" type="email" maxlength="120" value="${user.email}"><p class="field-error"></p></label>
+          <label class="field"><span>Email${ML.remote.enabled ? ' (used to log in — cannot be changed here)' : ''}</span><input name="email" type="email" maxlength="120" value="${user.email}" ${ML.remote.enabled ? u.trusted('disabled') : ''}><p class="field-error"></p></label>
           ${user.role === 'student' ? html`<label class="field"><span>Class / level</span><select name="level">${u.LEVELS.map((l) => html`<option ${user.level === l ? 'selected' : ''}>${l}</option>`)}</select></label>` : ''}
         </div>
         <fieldset style="border:0;padding:0;margin:0 0 14px"><legend class="small" style="font-weight:500;margin-bottom:6px">Preferred subjects</legend><div class="row">
@@ -435,8 +435,8 @@
       e.preventDefault();
       const errs = {}; const n = ML.auth.RULES.fullName(pf.fullName.value); if (n) errs.fullName = n; const em = ML.auth.RULES.email(pf.email.value); if (em) errs.email = em;
       ML.fieldErrors(pf, errs); if (Object.keys(errs).length) return;
-      const email = pf.email.value.trim().toLowerCase();
-      if ((await db.all('users')).some((x) => x.id !== user.id && x.email === email)) { ML.fieldErrors(pf, { email: 'Another account uses this email.' }); return; }
+      const email = ML.remote.enabled ? user.email : pf.email.value.trim().toLowerCase();
+      if (!ML.remote.enabled && (await db.all('users')).some((x) => x.id !== user.id && x.email === email)) { ML.fieldErrors(pf, { email: 'Another account uses this email.' }); return; }
       const prefs = u.$$('input[name=pref]:checked', pf).map((x) => x.value);
       await ML.users.update(user, { fullName: pf.fullName.value.trim(), email, level: pf.level ? pf.level.value : user.level, preferredSubjects: prefs });
       if (prefs[0] && !ML.settings.get().preferredSubject) ML.settings.set({ preferredSubject: prefs[0] });
@@ -478,7 +478,8 @@
           : html`<p class="badge warn">This browser does not support notifications.</p>`}
       </div>
       <div class="card stack"><h2>💾 Storage</h2>
-        <p>All your data is stored <b>only in this browser on this device</b>. It is not synced to other devices, and clearing browser data deletes it.</p>
+        ${ML.remote.enabled ? html`<p>Your account, lessons, quiz results and characters are saved <b>online</b> and available on any device you log in from. Theme and background settings are saved per device.</p>`
+          : html`<p>All your data is stored <b>only in this browser on this device</b>. It is not synced to other devices, and clearing browser data deletes it.</p>`}
         ${est ? html`<p class="small muted">Using about ${(est.usage / 1048576).toFixed(1)} MB of ${(est.quota / 1048576).toFixed(0)} MB available to this app.</p>` : ''}
         ${ML.prefs.available ? '' : html`<p class="badge warn">Browser storage for settings is blocked — settings will reset when you close the app.</p>`}
       </div>
@@ -502,6 +503,11 @@
       if (user.role === 'teacher' && (await db.byIndex('users', 'role', 'teacher')).length < 2) { u.toast('You are the only teacher. Create another teacher account before deleting this one.', 'error'); return; }
       const typed = await u.prompt('Delete account', 'Type your username (' + user.username + ') to permanently delete your account and all your data', '', { okLabel: 'Delete forever', check: (v) => (v.toLowerCase() === user.username ? '' : 'Username does not match.') });
       if (!typed) return;
+      if (ML.remote.enabled) {
+        try { await ML.remote.deleteAccount(); ML.prefs.remove('settings.' + user.id); await ML.logout(); }
+        catch (e) { u.toast(e.message, 'error'); }
+        return;
+      }
       const uid = user.id;
       const [att, prog, chars, notes, sessions, qs] = await Promise.all([db.byIndex('attempts', 'userId', uid), db.byIndex('progress', 'userId', uid), db.byIndex('characters', 'userId', uid), db.byIndex('notifications', 'userId', uid), db.all('sessions'), db.byIndex('questions', 'ownerId', uid)]);
       await db.delMany('attempts', att.map((x) => x.id)); await db.delMany('progress', prog.map((x) => x.id)); await db.delMany('characters', chars.map((x) => x.id));

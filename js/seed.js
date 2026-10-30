@@ -368,34 +368,44 @@ Programs that tell the hardware what to do.
     q('fill', 'Programs that tell a computer what to do are called ___.', [], 'software', 'Software = programs.', CS, 'JSS 1', 'Hardware and Software', 'easy'),
   ];
 
-  async function run() {
-    const flag = await ML.db.get('meta', 'seeded');
-    if (flag) return false;
+  /** Build all sample records. stableIds=true gives deterministic question ids (used for supabase/seed.sql). */
+  function build(opts) {
+    opts = opts || {};
     const owner = { id: 'system', role: 'teacher' };
     const questions = [];
-    for (const raw of RAW_QUESTIONS) {
+    RAW_QUESTIONS.forEach((raw, i) => {
       const r = ML.Q.validate(raw, {});
-      if (r.errors.length) { console.warn('Seed question skipped:', raw.text, r.errors); continue; }
-      questions.push(ML.Q.toRecord(r.q, owner, 'Sample Bank', { practice: true, builtIn: true }));
-    }
+      if (r.errors.length) { console.warn('Seed question skipped:', raw.text, r.errors); return; }
+      const extra = { practice: true, builtIn: true };
+      if (opts.stableIds) extra.id = 'q_seed_' + String(i + 1).padStart(3, '0');
+      questions.push(ML.Q.toRecord(r.q, owner, 'Sample Bank', extra));
+    });
     const pick = (subject, n) => questions.filter((x) => x.subject === subject && x.type !== 'short').slice(0, n).map((x) => x.id);
-    const quiz = (id, title, subject, level, ids, opts) => Object.assign({
+    const quiz = (id, title, subject, level, ids, o) => Object.assign({
       id, title, subject, level, description: '', questionIds: ids, marks: {}, timeLimitMin: 0, feedbackMode: 'immediate', shuffle: false,
       status: 'published', assign: { type: 'all', level: '', studentIds: [] }, dueDate: null, createdBy: 'system', createdAt: Date.now(), publishedAt: Date.now(),
-    }, opts || {});
+    }, o || {});
     const sciIds = questions.filter((x) => x.subject === S).map((x) => x.id);
     const quizzes = [
       quiz('qz_math_start', 'Mathematics Starter Quiz', M, 'Primary 5', pick(M, 10), { description: 'Place value, multiplication and BODMAS. Instant feedback after every question.' }),
       quiz('qz_eng_gram', 'English Grammar Challenge', EN, 'Primary 5', pick(EN, 10), { description: 'Timed: 8 minutes. Feedback is shown after you submit.', timeLimitMin: 8, feedbackMode: 'after', shuffle: true }),
       quiz('qz_sci_check', 'Basic Science Check', S, 'JSS 1', sciIds, { description: 'Includes one written answer marked by your teacher.' }),
     ];
-    await ML.db.putMany('courses', COURSES);
-    await ML.db.putMany('lessons', LESSONS);
-    await ML.db.putMany('questions', questions);
-    await ML.db.putMany('quizzes', quizzes);
+    return { courses: COURSES, lessons: LESSONS, questions, quizzes };
+  }
+
+  /** Local mode only: load sample content into IndexedDB once. (Online mode uses supabase/seed.sql.) */
+  async function run() {
+    const flag = await ML.db.get('meta', 'seeded');
+    if (flag) return false;
+    const b = build();
+    await ML.db.putMany('courses', b.courses);
+    await ML.db.putMany('lessons', b.lessons);
+    await ML.db.putMany('questions', b.questions);
+    await ML.db.putMany('quizzes', b.quizzes);
     await ML.db.put('meta', { key: 'seeded', value: Date.now() });
     return true;
   }
 
-  ML.seed = { run, RAW_QUESTIONS };
+  ML.seed = { run, build, RAW_QUESTIONS };
 })();

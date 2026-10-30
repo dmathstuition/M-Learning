@@ -130,17 +130,19 @@
       const prevB = u.$('#prev', root); if (prevB) prevB.onclick = () => { saveInput(); st.idx--; render(); };
       const nextB = u.$('#next', root); if (nextB) nextB.onclick = () => { saveInput(); st.idx++; render(); };
       const chk = u.$('#check', root);
-      if (chk) chk.onclick = () => {
+      if (chk) chk.onclick = async () => {
         saveInput();
         if (!answered(q)) { u.toast('Choose or type an answer first.', 'error'); return; }
+        u.setBusy(chk, true, 'Checking…');
         try {
-          const r = ML.quizSvc.check(sessionId, q.id, st.answers[q.id]);
+          // async: in online mode the answer is checked by the server
+          const r = await ML.quizSvc.check(sessionId, q.id, st.answers[q.id]);
           // map the revealed answer to option positions for highlighting
           if (q.type === 'mcq') r.correctIndex = L.indexOf(r.correctText.charAt(0));
           if (q.type === 'tf') r.correctValue = r.correctText === 'True' ? 'true' : 'false';
           st.revealed[q.id] = r;
           render();
-        } catch (e) { u.toast(e.message, 'error'); }
+        } catch (e) { u.setBusy(chk, false); u.toast(e.message, 'error'); }
       };
       u.$('#restart', root).onclick = async () => {
         if (!(await u.confirm('Restart this quiz? All your answers so far will be cleared.', { okLabel: 'Restart' }))) return;

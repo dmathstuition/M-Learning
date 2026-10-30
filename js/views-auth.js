@@ -38,6 +38,7 @@
     <input name="${name}" type="${type}" ${u.trusted(extra || '')}><p class="field-error" aria-live="polite"></p></label>`;
 
   function banner() {
+    if (ML.remote.enabled) return html`<p class="small muted center" style="margin-top:14px">🔒 Your account is stored securely online — log in from any device.</p>`;
     return html`<p class="small muted center" style="margin-top:14px">🔒 Accounts and data are stored <b>only in this browser on this device</b>. They are not synced online.</p>`;
   }
 
@@ -48,13 +49,13 @@
       ${MASCOT}
       <h1>Welcome back!</h1>
       <div class="form-msg" role="alert"></div>
-      ${F('username', 'Username', 'text', 'autocomplete="username" autocapitalize="none" required')}
+      ${ML.remote.enabled ? F('username', 'Email', 'email', 'autocomplete="email" autocapitalize="none" required') : F('username', 'Username', 'text', 'autocomplete="username" autocapitalize="none" required')}
       ${F('password', 'Password', 'password', 'autocomplete="current-password" required')}
-      <label class="check"><input type="checkbox" name="remember" checked> Keep me signed in for 7 days</label>
+      ${ML.remote.enabled ? html`<input type="hidden" name="remember" value="1">` : html`<label class="check"><input type="checkbox" name="remember" checked> Keep me signed in for 7 days</label>`}
       <button class="btn primary" style="width:100%;margin-top:12px" type="submit">Log in</button>
       <p class="switch">New student? <a href="#/register">Create an account</a></p>
-      <details class="small muted"><summary>Forgot your password?</summary>
-        <p>This version has no email server, so automatic password recovery is not available. Ask your teacher to reset your password from <b>Teacher Dashboard → Students</b>.</p></details>
+      ${ML.remote.enabled ? html`<p class="switch"><a href="#/forgot">Forgot your password?</a></p>` : html`<details class="small muted"><summary>Forgot your password?</summary>
+        <p>This version has no email server, so automatic password recovery is not available. Ask your teacher to reset your password from <b>Teacher Dashboard → Students</b>.</p></details>`}
       ${hasTeacher ? '' : html`<p class="switch">First time on this device? <a href="#/setup">Set up a teacher account</a></p>`}
       ${banner()}
     </form></div>`);
@@ -62,14 +63,14 @@
     form.onsubmit = async (e) => {
       e.preventDefault();
       const errors = {};
-      if (!form.username.value.trim()) errors.username = 'Enter your username.';
+      if (!form.username.value.trim()) errors.username = ML.remote.enabled ? 'Enter your email.' : 'Enter your username.';
       if (!form.password.value) errors.password = 'Enter your password.';
       fieldErrors(form, errors);
       if (Object.keys(errors).length) return;
       const btn = u.$('button[type=submit]', form);
       u.setBusy(btn, true, 'Checking…');
       try {
-        const user = await auth.login(form.username.value, form.password.value, form.remember.checked);
+        const user = await auth.login(form.username.value, form.password.value, form.remember.type === 'hidden' || form.remember.checked);
         formMsg(form, 'Welcome, ' + user.fullName + '!', 'success');
         if (user.role === 'student') ML.notify.reminders(user).catch(() => {});
         location.hash = user.role === 'teacher' ? '#/teacher' : '#/home';
@@ -102,9 +103,15 @@
     const btn = u.$('button[type=submit]', form);
     u.setBusy(btn, true, 'Creating account…');
     try {
-      await auth.createAccount(data, role);
+      const created = await auth.createAccount(data, role);
+      if (created && created.needsConfirmation) {
+        // online mode with email confirmation switched on (Supabase default)
+        form.querySelectorAll('input, select, button').forEach((el) => { el.disabled = true; });
+        formMsg(form, 'Almost done! We sent a confirmation link to ' + created.email + '. Click it, then log in with your email and password.', 'success');
+        return;
+      }
       formMsg(form, 'Account created! Signing you in…', 'success');
-      await auth.login(data.username, data.password, false);
+      if (!(created && created.signedIn)) await auth.login(data.username, data.password, false);
       u.toast('Welcome to M Learning, ' + data.fullName.trim() + '!', 'success');
       location.hash = role === 'teacher' ? '#/teacher' : '#/home';
     } catch (err) { fieldErrors(form, err.fields || {}); formMsg(form, err.message, 'error'); }
@@ -119,6 +126,13 @@
   };
 
   V.setup = async (root) => {
+    if (ML.remote.enabled) {
+      root.innerHTML = String(html`<div class="auth-wrap"><div class="auth-card center"><h1>Teacher accounts</h1>
+        <p>Online teacher accounts are created by invitation. An existing teacher invites your email from <b>Students → Invite a teacher</b>; then register with that email and confirm it.</p>
+        <p class="small muted">Setting up the very first teacher? Follow “First teacher” in the README.</p>
+        <a class="btn primary" href="#/register">Register</a> <a class="btn ghost" href="#/login">Log in</a></div></div>`);
+      return;
+    }
     if (await auth.teacherExists()) {
       root.innerHTML = String(html`<div class="auth-wrap"><div class="auth-card center"><h1>Already set up</h1>
         <p>A teacher account already exists on this device. New teacher accounts can be added by a signed-in teacher from <b>Students → Add account</b>.</p>
@@ -129,5 +143,48 @@
     const form = u.$('form', root);
     u.$('.switch', form).insertAdjacentHTML('beforebegin', String(html`<p class="switch">Just a student? <a href="#/register">Register as a student instead</a></p>`));
     form.onsubmit = (e) => { e.preventDefault(); handleCreate(form, 'teacher'); };
+  };
+
+  // ---------------- password recovery (online mode only) ----------------
+  V.forgot = async (root) => {
+    if (!ML.remote.enabled) { location.replace('#/login'); return; }
+    root.innerHTML = String(html`<div class="auth-wrap"><form class="auth-card" novalidate>
+      <div class="brand"><span class="brand-logo">M</span><span><b>M Learning</b><small>Learn • Grow • Achieve</small></span></div>
+      <h1>Reset your password</h1><p class="muted center">Enter the email you registered with. We'll send you a link to choose a new password.</p>
+      <div class="form-msg" role="alert"></div>
+      ${F('email', 'Email', 'email', 'autocomplete="email" required')}
+      <button class="btn primary" style="width:100%" type="submit">Send reset link</button>
+      <p class="switch"><a href="#/login">Back to login</a></p></form></div>`);
+    const form = u.$('form', root);
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const err = auth.RULES.email(form.email.value); fieldErrors(form, err ? { email: err } : {}); if (err) return;
+      const btn = u.$('button[type=submit]', form); u.setBusy(btn, true, 'Sending…');
+      try { await auth.sendResetEmail(form.email.value); formMsg(form, 'If an account uses that email, a reset link is on its way. Check your inbox (and spam folder).', 'success'); }
+      catch (x) { formMsg(form, x.message, 'error'); }
+      finally { u.setBusy(btn, false); }
+    };
+  };
+
+  V.resetPassword = async (root) => {
+    if (!ML.remote.enabled) { location.replace('#/login'); return; }
+    const me = await auth.currentUser();
+    if (!me) {
+      root.innerHTML = String(html`<div class="auth-wrap"><div class="auth-card center"><h1>Link expired</h1><p>This reset link is invalid or has expired. Request a new one.</p><a class="btn primary" href="#/forgot">Send a new link</a></div></div>`);
+      return;
+    }
+    root.innerHTML = String(html`<div class="auth-wrap"><form class="auth-card" novalidate>
+      <h1>Choose a new password</h1><p class="muted center">For ${me.email}</p><div class="form-msg" role="alert"></div>
+      ${F('password', 'New password (8+ characters, with a letter and a number)', 'password', 'autocomplete="new-password" required')}
+      ${F('confirm', 'Confirm new password', 'password', 'autocomplete="new-password" required')}
+      <button class="btn primary" style="width:100%" type="submit">Save new password</button></form></div>`);
+    const form = u.$('form', root);
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const btn = u.$('button[type=submit]', form); u.setBusy(btn, true, 'Saving…');
+      try { await auth.setNewPassword(form.password.value, form.confirm.value); ML.remote.recovery = false; u.toast('Password updated. Welcome back!', 'success'); location.hash = me.role === 'teacher' ? '#/teacher' : '#/home'; }
+      catch (x) { formMsg(form, x.message, 'error'); }
+      finally { u.setBusy(btn, false); }
+    };
   };
 })();

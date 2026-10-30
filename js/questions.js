@@ -344,7 +344,7 @@
   }
   function givenText(q, given) {
     if (given == null || given === '') return 'No answer';
-    if (q.type === 'mcq') return LETTERS[Number(given)] + '. ' + (q.options[Number(given)] || '');
+    if (q.type === 'mcq') return /^\d+$/.test(String(given)) ? LETTERS[Number(given)] + '. ' + (q.options[Number(given)] || '') : String(given);
     if (q.type === 'tf') return given === 'true' ? 'True' : 'False';
     return String(given);
   }
@@ -374,7 +374,18 @@
     'Q: Water boils at ___ degrees Celsius at sea level.', 'Type: fill', 'Answer: 100|100°C', 'Topic: Matter', 'Subject: Basic Science',
   ].join('\n');
 
-  ML.Q = { LIMITS, TYPES, LETTERS, parseCSV, toCSV, csvToRaw, jsonToRaw, textToRaw, validate, validateBatch, rawFromFile, rawFromPaste,
+  // ---------- online storage split: public question vs. private answer key ----------
+  const KEY_FIELDS = ['answerIndex', 'answer', 'accepted', 'manual', 'explanation'];
+  /** Split a question record into {data (safe for students), key (answer key)}. */
+  function splitForStorage(rec) {
+    const data = {}; const key = {};
+    Object.keys(rec).forEach((k) => { if (KEY_FIELDS.includes(k)) key[k] = rec[k]; else data[k] = rec[k]; });
+    return { data, key };
+  }
+  /** Rebuild a full record from stored parts (key may be missing if the viewer can't see it). */
+  function joinFromStorage(data, key) { return Object.assign({ answerIndex: null, answer: '', accepted: [], manual: false, explanation: '' }, data, key || {}); }
+
+  ML.Q = { splitForStorage, joinFromStorage, LIMITS, TYPES, LETTERS, parseCSV, toCSV, csvToRaw, jsonToRaw, textToRaw, validate, validateBatch, rawFromFile, rawFromPaste,
     toRecord, toRaw, exportCSV, exportJSON, mark, correctText, givenText, stripForStudent, dupKey, normAnswer,
     CSV_TEMPLATE, JSON_TEMPLATE, TEXT_TEMPLATE };
 })();

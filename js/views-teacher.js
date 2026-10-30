@@ -330,17 +330,17 @@
       root.innerHTML = String(html`<div class="stack">
         <div class="card"><div class="row between"><div class="row" style="flex:1"><input class="input" style="max-width:320px" type="search" id="sq" placeholder="Search students" value="${q}">
           <select class="input" style="max-width:180px" id="sl"><option value="">All classes</option>${u.LEVELS.map((x) => html`<option ${lev === x ? 'selected' : ''}>${x}</option>`)}</select></div>
-          <button class="btn primary" id="add">＋ Add account</button></div>
-          <p class="small muted">Students can also register themselves. ${teachers.length} teacher account(s) on this device.</p></div>
+          <button class="btn primary" id="add">${ML.remote.enabled ? '＋ Invite a teacher' : '＋ Add account'}</button></div>
+          <p class="small muted">${ML.remote.enabled ? 'Students register themselves from the login page. ' + teachers.length + ' teacher account(s).' : 'Students can also register themselves. ' + teachers.length + ' teacher account(s) on this device.'}</p></div>
         ${l.length ? html`<div class="table-wrap"><table><thead><tr><th>Student</th><th>Class</th><th>Lessons done</th><th>Quizzes</th><th>Average</th><th>Last active</th><th>Actions</th></tr></thead><tbody>
           ${l.map((s) => { const at = attempts.filter((a) => a.userId === s.id && !a.practice); const done = prog.filter((p) => p.userId === s.id && p.type === 'lesson').length;
             return html`<tr><td><b>${s.fullName}</b><br><span class="small muted">@${s.username} · ${s.email}</span></td><td>${s.level || '—'}</td><td>${done}</td><td>${at.length}</td>
               <td>${at.length ? Math.round(at.reduce((x, a) => x + a.percent, 0) / at.length) + '%' : '—'}</td><td>${s.lastActiveAt ? u.timeAgo(s.lastActiveAt) : '—'}</td>
-              <td><div class="row"><a class="btn sm soft" href="#/teacher/student/${s.id}">Progress</a><button class="btn sm ghost" data-class="${s.id}">Class</button><button class="btn sm ghost" data-reset="${s.id}">Reset password</button></div></td></tr>`; })}
+              <td><div class="row"><a class="btn sm soft" href="#/teacher/student/${s.id}">Progress</a><button class="btn sm ghost" data-class="${s.id}">Class</button><button class="btn sm ghost" data-reset="${s.id}">${ML.remote.enabled ? 'Send reset email' : 'Reset password'}</button></div></td></tr>`; })}
         </tbody></table></div>` : html`<div class="card">${empty('👥', students.length ? 'No students match' : 'No students yet', 'Students can register from the login page, or you can add accounts here.')}</div>`}</div>`);
       u.$('#sq', root).oninput = u.debounce((e) => { q = e.target.value.toLowerCase(); draw(); const n = u.$('#sq', root); n.focus(); n.setSelectionRange(n.value.length, n.value.length); }, 250);
       u.$('#sl', root).onchange = (e) => { lev = e.target.value; draw(); };
-      u.$('#add', root).onclick = addAccount;
+      u.$('#add', root).onclick = ML.remote.enabled ? inviteTeacher : addAccount;
       u.$$('[data-class]', root).forEach((b) => { b.onclick = async () => {
         const s = students.find((x) => x.id === b.dataset.class);
         const r = await u.modal({ title: 'Change class for ' + s.fullName, body: html`<label class="field"><span>Class / level</span><select id="lv">${u.LEVELS.map((x) => html`<option ${s.level === x ? 'selected' : ''}>${x}</option>`)}</select></label>`,
@@ -350,10 +350,20 @@
       }; });
       u.$$('[data-reset]', root).forEach((b) => { b.onclick = async () => {
         const s = students.find((x) => x.id === b.dataset.reset);
+        if (ML.remote.enabled) {
+          if (!(await u.confirm('Email a password-reset link to ' + s.fullName + ' (' + s.email + ')?', { okLabel: 'Send email' }))) return;
+          try { await ML.auth.sendResetEmail(s.email); u.toast('Reset link sent to ' + s.email + '.', 'success'); } catch (e) { u.toast(e.message, 'error'); }
+          return;
+        }
         const pw = await u.prompt('Reset password for ' + s.fullName, 'New password (8+ characters, a letter and a number). Tell the student privately.', '', { type: 'text', maxLength: 128, okLabel: 'Set password', check: (v) => ML.auth.RULES.password(v) });
         if (!pw) return;
         try { await ML.auth.resetPasswordFor(s.id, pw); u.toast('Password reset. ' + s.fullName + ' has been signed out on this device.', 'success'); } catch (e) { u.toast(e.message, 'error'); }
       }; });
+    }
+    async function inviteTeacher() {
+      const email = await u.prompt('Invite a teacher', 'Their email address. They register with it and become a teacher once they confirm the email.', '', { type: 'email', maxLength: 120, okLabel: 'Invite', check: (v) => ML.auth.RULES.email(v) });
+      if (!email) return;
+      try { await ML.remote.inviteTeacher(email); u.toast(email + ' invited. Ask them to register with this email and confirm it.', 'success'); } catch (e) { u.toast(e.message, 'error'); }
     }
     async function addAccount() {
       const res = await u.modal({ title: 'Add an account', wide: true,

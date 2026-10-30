@@ -11,6 +11,8 @@
     ['/login', V.login, { public: true, bare: true }],
     ['/register', V.register, { public: true, bare: true }],
     ['/setup', V.setup, { public: true, bare: true }],
+    ['/forgot', V.forgot, { public: true, bare: true }],
+    ['/reset', V.resetPassword, { public: true, bare: true, allowAuthed: true }],
     ['/home', V.home, { title: 'Home' }],
     ['/courses', V.courses, { title: 'Course Library' }],
     ['/course/:id', V.course, { title: 'Course' }],
@@ -79,7 +81,7 @@
           ${nav.map(([label, items]) => html`<div class="nav-label">${label}</div><nav class="nav">${items.map(([href, ico, text, badge]) =>
             html`<a href="${href}" data-nav><span class="ico">${ico}</span>${text}${badge ? html`<span class="count" data-badge="${badge}" hidden></span>` : ''}</a>`)}</nav>`)}
           <nav class="nav"><a href="#" id="logout-link"><span class="ico">🚪</span>Log out</a></nav>
-          <div class="sidebar-foot">Signed in as <b>${user.username}</b> (${user.role}).<br>Data is stored on this device only.</div>
+          <div class="sidebar-foot">Signed in as <b>${user.username}</b> (${user.role}).<br>${ML.remote.enabled ? 'Online: synced to your school account.' : 'Data is stored on this device only.'}</div>
         </aside>
         <main class="main">
           <div class="topbar">
@@ -154,7 +156,7 @@
     if (m) m.params.query = new URLSearchParams(qs);
     if (!m) { location.replace('#' + (user ? (user.role === 'teacher' ? '/teacher' : '/home') : '/login')); return; }
     if (!m.opts.public && !user) { location.replace('#/login'); return; }
-    if (m.opts.public && user) { location.replace(user.role === 'teacher' ? '#/teacher' : '#/home'); return; }
+    if (m.opts.public && user && !m.opts.allowAuthed) { location.replace(user.role === 'teacher' ? '#/teacher' : '#/home'); return; }
     if (m.opts.roles && !m.opts.roles.includes(user.role)) {
       u.toast(user.role === 'student' ? 'That page is for teachers only.' : 'That page is for students.', 'error');
       location.replace(user.role === 'teacher' ? '#/teacher' : '#/home'); return;
@@ -194,9 +196,12 @@
 
   async function start() {
     ML.applyTheme(settings.get().theme);
+    let online = false;
     try {
-      await ML.db.open();
-      await ML.seed.run();
+      online = await ML.remote.init();   // Supabase configured? Then switch to online mode.
+    } catch (e) { console.error(e); return; }
+    try {
+      if (!online) { await ML.db.open(); await ML.seed.run(); }
     } catch (e) {
       u.$('#app').innerHTML = String(html`<div class="fatal card"><h1>Storage unavailable</h1><p>${e.message}</p>
         <p class="muted">M Learning saves lessons, quizzes and characters in your browser's IndexedDB storage. It may be blocked in private/incognito mode or by browser settings. Please open the app in a normal browser window.</p></div>`);
@@ -209,7 +214,8 @@
     window.addEventListener('hashchange', route);
     window.addEventListener('beforeunload', (e) => { if (ML.leaveGuard) { e.preventDefault(); e.returnValue = ''; } });
     window.addEventListener('keydown', (e) => { if (e.key === 'Escape') toggleMenu(false); });
-    const me = await auth.currentUser();
+    let me = null;
+    try { me = await auth.currentUser(); } catch (e) { u.toast(e.message, 'error'); }
     if (me && me.role === 'student') notify.reminders(me).catch(() => {});
     if (!me && !(await auth.teacherExists()) && !location.hash.startsWith('#/register')) location.hash = '#/setup';
     route();

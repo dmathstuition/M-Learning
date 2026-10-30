@@ -84,6 +84,16 @@
     return null;
   }
 
-  ML.db = { open, get, all, byIndex, put, putMany, del, delMany, isQuotaError, estimate };
+  // ML.db is a facade: by default it uses IndexedDB (this file). In online mode js/remote.js
+  // swaps in a Supabase implementation with the same methods, so the rest of the app is unchanged.
+  const local = { open, get, all, byIndex, put, putMany, del, delMany };
+  let impl = local;
+  ML.db = {
+    open: (...a) => impl.open(...a), get: (...a) => impl.get(...a), all: (...a) => impl.all(...a),
+    byIndex: (...a) => impl.byIndex(...a), put: (...a) => impl.put(...a), putMany: (...a) => impl.putMany(...a),
+    del: (...a) => impl.del(...a), delMany: (...a) => impl.delMany(...a),
+    setImpl(next) { impl = next; }, isQuotaError, estimate,
+  };
+  ML.remote = ML.remote || { enabled: false };
   ML.prefs = prefs;
 })();

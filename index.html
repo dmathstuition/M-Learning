@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#eef0fb">
   <meta name="description" content="M Learning App — Learn • Grow • Achieve. Lessons, quizzes, progress tracking and your own character background.">
   <!-- Strict CSP: only this app's own scripts run. Imported text can never become executable script. -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' blob: data: https:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' blob: data: https:; connect-src 'self' https://*.supabase.co wss://*.supabase.co; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>M Learning App — Learn • Grow • Achieve</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -21,6 +21,8 @@
   <div id="app"><div class="loading"><div><div class="spinner"></div>Loading M Learning…</div></div></div>
   <noscript><div class="fatal card">M Learning App needs JavaScript enabled.</div></noscript>
 
+  <script src="js/config.js"></script>
+  <script src="js/vendor/supabase.js"></script>
   <script src="js/util.js"></script>
   <script src="js/db.js"></script>
   <script src="js/auth.js"></script>
@@ -33,6 +35,7 @@
   <script src="js/views-student.js"></script>
   <script src="js/views-bank.js"></script>
   <script src="js/views-teacher.js"></script>
+  <script src="js/remote.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

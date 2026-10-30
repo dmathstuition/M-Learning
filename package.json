@@ -1,13 +1,18 @@
 {
   "name": "m-learning-app",
   "version": "1.0.0",
-  "description": "M Learning App — Learn • Grow • Achieve. Local-first school learning platform.",
+  "description": "M Learning App \u2014 Learn \u2022 Grow \u2022 Achieve. Local-first school learning platform.",
   "private": true,
   "scripts": {
     "start": "python3 -m http.server 8080",
-    "test": "node tests/e2e.test.js"
+    "test": "node tests/sql.test.js && node tests/e2e.test.js && node tests/online.test.js",
+    "test:sql": "node tests/sql.test.js",
+    "test:e2e": "node tests/e2e.test.js",
+    "test:online": "node tests/online.test.js",
+    "seed-sql": "node tools/gen-seed-sql.js"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "^0.2.17",
     "playwright": "^1.47.0"
   }
 }

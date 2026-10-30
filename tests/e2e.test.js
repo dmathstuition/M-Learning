@@ -13,6 +13,7 @@ fs.mkdirSync(OUT, { recursive: true });
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.csv': 'text/csv', '.txt': 'text/plain' };
 const server = http.createServer((req, res) => {
   let p = decodeURIComponent(req.url.split('?')[0]); if (p === '/') p = '/index.html';
+  if (p === '/api/config') { res.writeHead(200, { 'Content-Type': 'application/json' }); res.end('{}'); return; } // like Vercel with no Supabase env vars → local mode
   const f = path.join(ROOT, p);
   if (!f.startsWith(ROOT) || !fs.existsSync(f) || fs.statSync(f).isDirectory()) { res.writeHead(404); res.end(); return; }
   res.writeHead(200, { 'Content-Type': TYPES[path.extname(f)] || 'application/octet-stream' }); fs.createReadStream(f).pipe(res);
@@ -36,7 +37,9 @@ function check(cond, name) { if (cond) { passed++; console.log('  ✓', name); }
 (async () => {
   await new Promise((r) => server.listen(0, r));
   const BASE = 'http://localhost:' + server.address().port + '/';
-  const browser = await chromium.launch();
+  // Use Playwright's own browser; fall back to a system Chromium if that version isn't downloaded.
+  const fallback = ['/opt/pw-browsers/chromium', process.env.CHROMIUM_PATH].filter((x) => x && fs.existsSync(x));
+  const browser = await chromium.launch().catch((e) => { if (!fallback.length) throw e; return chromium.launch({ executablePath: fallback[0] }); });
   const ctx = await browser.newContext({ acceptDownloads: true, viewport: { width: 1280, height: 860 } });
   const p = await ctx.newPage();
   const errors = []; let alerts = 0;
