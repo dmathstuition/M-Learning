@@ -1,0 +1,320 @@
+{
+  "format": "m-learning-questions",
+  "version": 1,
+  "questions": [
+    {
+      "type": "mcq",
+      "question": "What is the value of the digit 6 in 46,215?",
+      "options": [
+        "6",
+        "600",
+        "6,000",
+        "60,000"
+      ],
+      "answer": "C",
+      "explanation": "Counting from the right: 5 ones, 1 ten, 2 hundreds, 6 thousands → 6,000.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Place Value",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which number is \"forty thousand and twelve\"?",
+      "options": [
+        "4,012",
+        "40,012",
+        "40,120",
+        "400,012"
+      ],
+      "answer": "B",
+      "explanation": "40,000 + 12 = 40,012.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Place Value",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is 12 × 11?",
+      "options": [
+        "121",
+        "132",
+        "122",
+        "144"
+      ],
+      "answer": "B",
+      "explanation": "12 × 11 = 12 × 10 + 12 = 132.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Multiplication",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "8 × 7 = ___",
+      "answer": "56",
+      "explanation": "Double 4 × 7 = 28 → 56.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Multiplication",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Calculate 5 + 3 × 4.",
+      "options": [
+        "32",
+        "17",
+        "20",
+        "12"
+      ],
+      "answer": "B",
+      "explanation": "Multiply first: 3 × 4 = 12, then 5 + 12 = 17.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Order of Operations",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "short",
+      "question": "Calculate (10 − 4) × 3 + 2.",
+      "answer": "20",
+      "explanation": "Brackets: 6. Multiply: 18. Add 2: 20.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Order of Operations",
+      "difficulty": "medium",
+      "marks": 2
+    },
+    {
+      "type": "tf",
+      "question": "In BODMAS, addition is always done before subtraction.",
+      "answer": "false",
+      "explanation": "Addition and subtraction have equal rank; work left to right.",
+      "subject": "Mathematics",
+      "level": "Primary 5",
+      "topic": "Order of Operations",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which fraction is equivalent to 3/4?",
+      "options": [
+        "6/8",
+        "4/3",
+        "3/8",
+        "9/16"
+      ],
+      "answer": "A",
+      "explanation": "Multiply top and bottom by 2: 3/4 = 6/8.",
+      "subject": "Mathematics",
+      "level": "Primary 6",
+      "topic": "Fractions",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is 1/2 + 1/3?",
+      "options": [
+        "2/5",
+        "5/6",
+        "1/6",
+        "2/6"
+      ],
+      "answer": "B",
+      "explanation": "LCM is 6: 3/6 + 2/6 = 5/6.",
+      "subject": "Mathematics",
+      "level": "Primary 6",
+      "topic": "Fractions",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "Simplify 10/15 = ___ (write as a fraction)",
+      "answer": "2/3",
+      "explanation": "Divide top and bottom by 5.",
+      "subject": "Mathematics",
+      "level": "Primary 6",
+      "topic": "Fractions",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is 25% of 200?",
+      "options": [
+        "25",
+        "40",
+        "50",
+        "75"
+      ],
+      "answer": "C",
+      "explanation": "25% = 1/4, and 200 ÷ 4 = 50.",
+      "subject": "Mathematics",
+      "level": "Primary 6",
+      "topic": "Percentages",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "short",
+      "question": "Write 3/5 as a percentage (number only).",
+      "answer": "60|60%",
+      "explanation": "3/5 × 100 = 60%.",
+      "subject": "Mathematics",
+      "level": "Primary 6",
+      "topic": "Percentages",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Simplify 4a + 3b − a + 2b.",
+      "options": [
+        "3a + 5b",
+        "5a + 5b",
+        "3a + b",
+        "7ab"
+      ],
+      "answer": "A",
+      "explanation": "(4a − a) + (3b + 2b) = 3a + 5b.",
+      "subject": "Mathematics",
+      "level": "JSS 1",
+      "topic": "Algebraic Expressions",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If x = 4, what is 3x − 5?",
+      "options": [
+        "7",
+        "12",
+        "17",
+        "2"
+      ],
+      "answer": "A",
+      "explanation": "3 × 4 − 5 = 12 − 5 = 7.",
+      "subject": "Mathematics",
+      "level": "JSS 1",
+      "topic": "Algebraic Expressions",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "short",
+      "question": "Solve for x: 2x + 7 = 19",
+      "answer": "6|x=6|x = 6",
+      "explanation": "Subtract 7: 2x = 12. Divide by 2: x = 6.",
+      "subject": "Mathematics",
+      "level": "JSS 1",
+      "topic": "Linear Equations",
+      "difficulty": "medium",
+      "marks": 2
+    },
+    {
+      "type": "mcq",
+      "question": "Solve: x − 9 = 4",
+      "options": [
+        "5",
+        "13",
+        "−5",
+        "36"
+      ],
+      "answer": "B",
+      "explanation": "Add 9 to both sides: x = 13.",
+      "subject": "Mathematics",
+      "level": "JSS 1",
+      "topic": "Linear Equations",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "If 5y = 35, then y = ___",
+      "answer": "7",
+      "explanation": "Divide both sides by 5.",
+      "subject": "Mathematics",
+      "level": "JSS 1",
+      "topic": "Linear Equations",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the area of a rectangle 9 cm by 4 cm?",
+      "options": [
+        "13 cm²",
+        "26 cm²",
+        "36 cm²",
+        "36 cm"
+      ],
+      "answer": "C",
+      "explanation": "Area = length × width = 36 cm² (square units).",
+      "subject": "Mathematics",
+      "level": "JSS 2",
+      "topic": "Perimeter and Area",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "short",
+      "question": "Find the perimeter (in cm) of a square with side 7 cm.",
+      "answer": "28|28 cm|28cm",
+      "explanation": "Perimeter = 4 × 7 = 28 cm.",
+      "subject": "Mathematics",
+      "level": "JSS 2",
+      "topic": "Perimeter and Area",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "An angle of 120° is…",
+      "options": [
+        "acute",
+        "right",
+        "obtuse",
+        "reflex"
+      ],
+      "answer": "C",
+      "explanation": "Between 90° and 180° → obtuse.",
+      "subject": "Mathematics",
+      "level": "JSS 2",
+      "topic": "Angles",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "Two angles of a triangle are 40° and 75°. The third angle is ___ degrees.",
+      "answer": "65|65°",
+      "explanation": "180 − 40 − 75 = 65.",
+      "subject": "Mathematics",
+      "level": "JSS 2",
+      "topic": "Angles",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "tf",
+      "question": "Angles on a straight line add up to 360°.",
+      "answer": "false",
+      "explanation": "They add up to 180°. Angles around a point add up to 360°.",
+      "subject": "Mathematics",
+      "level": "JSS 2",
+      "topic": "Angles",
+      "difficulty": "easy",
+      "marks": 1
+    }
+  ]
+}

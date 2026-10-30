@@ -1,0 +1,6 @@
+﻿"type","question","option_a","option_b","option_c","option_d","option_e","option_f","answer","explanation","subject","level","topic","difficulty","marks","image","manual_marking"
+"mcq","What is 7 × 8?","54","56","64","48","","","B","7 × 8 = 56. Think of 7 × 4 = 28, then double it.","Mathematics","Primary 5","Multiplication","easy","1","",""
+"tf","A noun is a naming word.","","","","","","","true","Nouns name people, places, animals and things.","English","Primary 4","Parts of Speech","easy","1","",""
+"fill","The process by which plants make food is called ___.","","","","","","","photosynthesis","Plants use sunlight, water and carbon dioxide to make glucose.","Basic Science","JSS 1","Living Things","medium","2","",""
+"short","Solve for x: 3x + 5 = 20","","","","","","","5|x=5|x = 5","3x = 15, so x = 5.","Mathematics","JSS 1","Linear Equations","medium","2","",""
+"short","In one or two sentences, explain why we need computers in schools.","","","","","","","","Look for: faster research, typing, record keeping, learning programs.","Computer Studies","JSS 1","Introduction to Computers","medium","3","","yes"

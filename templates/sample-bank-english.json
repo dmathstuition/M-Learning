@@ -1,0 +1,293 @@
+{
+  "format": "m-learning-questions",
+  "version": 1,
+  "questions": [
+    {
+      "type": "mcq",
+      "question": "Which word is a noun? \"The happy girl sang beautifully.\"",
+      "options": [
+        "happy",
+        "girl",
+        "sang",
+        "beautifully"
+      ],
+      "answer": "B",
+      "explanation": "\"girl\" names a person.",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Parts of Speech",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Identify the adjective: \"She wore a red dress.\"",
+      "options": [
+        "She",
+        "wore",
+        "red",
+        "dress"
+      ],
+      "answer": "C",
+      "explanation": "\"red\" describes the noun \"dress\".",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Parts of Speech",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which word is a conjunction?",
+      "options": [
+        "quickly",
+        "because",
+        "under",
+        "wow"
+      ],
+      "answer": "B",
+      "explanation": "Conjunctions join clauses — \"because\".",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Parts of Speech",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "tf",
+      "question": "A pronoun is used in place of a noun.",
+      "answer": "true",
+      "explanation": "He, she, it, they replace nouns.",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Parts of Speech",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "The past tense of \"go\" is ___.",
+      "answer": "went",
+      "explanation": "\"go\" is irregular: go → went → gone.",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Tenses",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Choose the future tense.",
+      "options": [
+        "I ate rice.",
+        "I eat rice.",
+        "I will eat rice.",
+        "I am eating rice."
+      ],
+      "answer": "C",
+      "explanation": "\"will + verb\" shows the future.",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Tenses",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Choose the correct verb: \"Each of the boys ___ a ball.\"",
+      "options": [
+        "have",
+        "has",
+        "are having",
+        "were"
+      ],
+      "answer": "B",
+      "explanation": "\"Each\" is singular → has.",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Subject-Verb Agreement",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "\"The box of pencils ___ on the table.\"",
+      "options": [
+        "is",
+        "are",
+        "were",
+        "be"
+      ],
+      "answer": "A",
+      "explanation": "The subject is \"box\" (singular).",
+      "subject": "English",
+      "level": "Primary 5",
+      "topic": "Subject-Verb Agreement",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "A synonym of \"enormous\" is…",
+      "options": [
+        "tiny",
+        "huge",
+        "quiet",
+        "early"
+      ],
+      "answer": "B",
+      "explanation": "Enormous and huge both mean very big.",
+      "subject": "English",
+      "level": "Primary 6",
+      "topic": "Vocabulary",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "An antonym of \"ancient\" is…",
+      "options": [
+        "old",
+        "modern",
+        "historic",
+        "aged"
+      ],
+      "answer": "B",
+      "explanation": "Ancient means very old; the opposite is modern.",
+      "subject": "English",
+      "level": "Primary 6",
+      "topic": "Vocabulary",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "short",
+      "question": "Give one synonym for \"happy\".",
+      "answer": "glad|joyful|cheerful|delighted|pleased|content|merry",
+      "explanation": "Any word with a similar meaning is accepted.",
+      "subject": "English",
+      "level": "Primary 6",
+      "topic": "Vocabulary",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which word is spelt correctly?",
+      "options": [
+        "recieve",
+        "receive",
+        "receeve",
+        "riceive"
+      ],
+      "answer": "B",
+      "explanation": "\"i before e except after c\" → receive.",
+      "subject": "English",
+      "level": "Primary 6",
+      "topic": "Spelling",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which word is spelt correctly?",
+      "options": [
+        "neccessary",
+        "necesary",
+        "necessary",
+        "nesessary"
+      ],
+      "answer": "C",
+      "explanation": "One c, double s: necessary.",
+      "subject": "English",
+      "level": "Primary 6",
+      "topic": "Spelling",
+      "difficulty": "medium",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "carry + es = ___",
+      "answer": "carries",
+      "explanation": "Consonant + y → change y to i and add -es.",
+      "subject": "English",
+      "level": "Primary 6",
+      "topic": "Spelling",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "In the Adaeze passage, why did the teacher praise her?",
+      "options": [
+        "She was the tallest",
+        "She was never late",
+        "She fed the chickens",
+        "She lived nearby"
+      ],
+      "answer": "B",
+      "explanation": "The passage says she was praised for never being late.",
+      "subject": "English",
+      "level": "JSS 1",
+      "topic": "Reading Comprehension",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "tf",
+      "question": "The main idea of a passage is the same as one small detail in it.",
+      "answer": "false",
+      "explanation": "The main idea is what the whole passage is about; details support it.",
+      "subject": "English",
+      "level": "JSS 1",
+      "topic": "Reading Comprehension",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which sentence is punctuated correctly?",
+      "options": [
+        "its raining today.",
+        "It's raining today.",
+        "Its raining today",
+        "it's raining today"
+      ],
+      "answer": "B",
+      "explanation": "\"It's\" = it is, and a sentence starts with a capital letter.",
+      "subject": "English",
+      "level": "JSS 1",
+      "topic": "Punctuation",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which mark ends a direct question?",
+      "options": [
+        ".",
+        ",",
+        "?",
+        "!"
+      ],
+      "answer": "C",
+      "explanation": "Direct questions end with a question mark.",
+      "subject": "English",
+      "level": "JSS 1",
+      "topic": "Punctuation",
+      "difficulty": "easy",
+      "marks": 1
+    },
+    {
+      "type": "fill",
+      "question": "The bag belonging to Tunde is Tunde___ bag. (write the missing characters)",
+      "answer": "'s",
+      "explanation": "Possession of a singular noun: add 's.",
+      "subject": "English",
+      "level": "JSS 1",
+      "topic": "Punctuation",
+      "difficulty": "medium",
+      "marks": 1
+    }
+  ]
+}

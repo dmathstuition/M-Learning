@@ -1,0 +1,8 @@
+"type","question","option_a","option_b","option_c","option_d","answer","explanation","subject","level","topic","difficulty","marks"
+"mcq","What is 9 × 9?","81","72","99","18","A","9 × 9 = 81","Mathematics","Primary 5","Multiplication","easy","1"
+"mcq","What is 9 × 9?","81","72","99","18","A","duplicate of the row above","Mathematics","Primary 5","Multiplication","easy","1"
+"mcq","Which is a prime number?","4","6","9","","E","answer letter E does not exist","Mathematics","Primary 6","Primes","medium","1"
+"tf","The sun is a star.","","","","","maybe","invalid true/false answer","Basic Science","JSS 1","Space","easy","1"
+"","<script>alert(""hi"")</script> Is this shown as plain text?","","","","","true","HTML is displayed as text, never run","Computer Studies","JSS 1","Online Safety","easy","1"
+"fill","Lagos is in ___ Nigeria.","","","","","","missing accepted answer","English","JSS 1","","hard","2"
+"short","Name one renewable energy source.","","","","","solar|wind|hydro","Any one is fine","Basic Science","JSS 2","Energy","superhard","1"

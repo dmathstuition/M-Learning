@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#eef0fb">
+  <meta name="description" content="M Learning App — Learn • Grow • Achieve. Lessons, quizzes, progress tracking and your own character background.">
+  <!-- Strict CSP: only this app's own scripts run. Imported text can never become executable script. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; img-src 'self' blob: data: https:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>M Learning App — Learn • Grow • Achieve</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237c5cff'/%3E%3Ctext x='32' y='44' font-size='34' font-family='Arial' font-weight='700' text-anchor='middle' fill='white'%3EM%3C/text%3E%3C/svg%3E">
+  <script src="js/boot-theme.js"></script>
+</head>
+<body>
+  <!-- The active character is drawn here, behind every page -->
+  <div id="char-layer" aria-hidden="true"><img id="char-img" alt=""><div id="char-overlay"></div></div>
+  <div id="app"><div class="loading"><div><div class="spinner"></div>Loading M Learning…</div></div></div>
+  <noscript><div class="fatal card">M Learning App needs JavaScript enabled.</div></noscript>
+
+  <script src="js/util.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/questions.js"></script>
+  <script src="js/seed.js"></script>
+  <script src="js/services.js"></script>
+  <script src="js/character.js"></script>
+  <script src="js/quiz-player.js"></script>
+  <script src="js/views-auth.js"></script>
+  <script src="js/views-student.js"></script>
+  <script src="js/views-bank.js"></script>
+  <script src="js/views-teacher.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

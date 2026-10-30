@@ -1,0 +1,22 @@
+Q: What is 7 × 8?
+A) 54
+B) 56
+C) 64
+D) 48
+Answer: B
+Explanation: 7 × 8 = 56.
+Topic: Multiplication
+Subject: Mathematics
+Difficulty: easy
+
+Q: A noun is a naming word.
+Type: tf
+Answer: true
+Topic: Parts of Speech
+Subject: English
+
+Q: Water boils at ___ degrees Celsius at sea level.
+Type: fill
+Answer: 100|100°C
+Topic: Matter
+Subject: Basic Science
